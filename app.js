@@ -67,9 +67,9 @@ const sessionOptions = {
   },
 };
 
-// /* app.get("/", async (req, res) => {
-//   res.send("working  ");
-// }); */
+app.get("/", async (req, res) => {
+  res.redirect("/listing");
+});
 
 app.use(session(sessionOptions));
 app.use(flash());
