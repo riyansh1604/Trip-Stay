@@ -1,0 +1,130 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+    <!-- <h3>All listing of hotels</h3> -->
+    <!-- Wrapper holding buttons and filters -->
+    <div class="filters-main">
+        
+        <!-- Left Button (Outside the scrollable div) -->
+        <button class="filter-arrow left" id="leftBtn" aria-label="Scroll left">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <!-- Scrollable Div -->
+        <div id="filters">
+            <div class="filter">
+                <a href="/listing?category=Trending" class="category">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                    <p>Trending</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Rooms" class="category">
+                    <i class="fa-solid fa-bed"></i>
+                    <p>Rooms</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Iconic cities" class="category">
+                    <i class="fa-solid fa-mountain-city"></i>
+                    <p>Iconic cities</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Mountains" class="category">
+                    <i class="fa-solid fa-mountain"></i>
+                    <p>Mountains</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Castles" class="category">
+                    <i class="fa-brands fa-fort-awesome"></i>
+                    <p>Castles</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Amazing pools" class="category">
+                    <i class="fa-solid fa-water-ladder"></i>
+                    <p>Amazing pools</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Farms" class="category">
+                    <i class="fa-solid fa-tractor"></i>
+                    <p>Farms</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Beach" class="category">
+                    <i class="fa-solid fa-umbrella-beach"></i>
+                    <p>Beach</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Camping" class="category">
+                    <i class="fa-solid fa-tent"></i>
+                    <p>Camping</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Arctic" class="category">
+                    <i class="fa-regular fa-snowflake"></i>
+                    <p>Arctic</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Golfing" class="category">
+                    <i class="fa-solid fa-golf-ball-tee"></i>
+                    <p>Golfing</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=Bed & breakfasts" class="category">
+                    <i class="fa-solid fa-mug-saucer"></i>
+                    <p>Bed & breakfasts</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listing?category=OMG!" class="category">
+                    <i class="fa-solid fa-volcano"></i>
+                    <p>OMG!</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Button (Outside the scrollable div) -->
+        <button class="filter-arrow right" id="rightBtn" aria-label="Scroll right">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <div class="tax-toggle">
+            <!-- Bootstrap ki form-switch aur form-check-reverse (text left, switch right karne ke liye) -->
+            <div class="form-check-reverse form-switch d-flex align-items-center mb-0">
+                <label class="form-check-label" id="taxToggleLabel" for="taxSwitch">Display total before taxes</label>
+                <input class="form-check-input ms-2" type="checkbox" role="switch" id="taxSwitch">
+            </div>
+        </div>
+
+    </div>
+    <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 mt-3">
+    <% for( listing of allListings) { %>
+        <a href="/listing/<%= listing._id %>" class="listing-card-links">
+                <div class="card listing-card col">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= listing.title %></b><br>
+                            &#8377;<%= listing.price.toLocaleString("en-IN") %>/Night
+                            <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
+                        </p>
+                    </div>
+                    
+                </div>
+        </a>
+    <% } %>
+    </div>
+
+</body>
+
+
+

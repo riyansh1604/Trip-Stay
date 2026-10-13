@@ -1,0 +1,389 @@
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container{
+    flex:1;
+}
+
+/* .navbar{
+    height: 5rem;
+    background-color: white;
+}
+
+.fa-house-chimney-window{
+    size: 2rem;
+    color: #fe424d;
+    font-size: 1.5rem;
+} */
+
+.navbar {
+    height: 5rem;
+    background-color: #fff;
+    padding: 0 2rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Logo container */
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: auto;
+    height: auto;
+    margin-right: 1.5rem;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #fe424d;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.25s ease;
+}
+
+
+/* Hover animation */
+.navbar-brand:hover {
+    background: transparent;
+    color: #fe424d;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.85;
+}
+
+/* Icon */
+.navbar-brand i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: #fe424d;
+    color: white !important;
+    font-size: 1.4rem;
+}
+/* .navbar-brand i {
+    color: white !important;
+} */
+.brand-name {
+    display: inline-block;
+    color: #fe424d;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Navbar links */
+.navbar .nav-link {
+    color: #222;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #fe424d;
+}
+
+.nav-link{
+    color: black !important;
+}
+
+.f-info{
+    text-align: center;
+    background-color: #ebebeb;
+    height: 8rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color: #222;
+}
+
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+.f-info-social i{
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+.f-info,.f-info-links,.f-info-brand,.f-info-social{
+    width: 100%;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* index cards */
+.listing-card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+.card-body{
+    padding: 0 !important;
+}
+.card-img-top{
+    border-radius: 1rem;
+    width: 100%;
+    object-fit: cover;
+    height: 20rem;
+}
+.card-text{
+    font-weight: 400;
+}
+.listing-card-links{
+    text-decoration: none !important;
+}
+
+/* card effect */
+.card-img-overlay{
+    opacity: 0 ;
+}
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+}
+/* new listing */
+.add-btn{
+    background-color: #fe424d !important;
+    border: none;
+}
+
+/* edit page */
+.edit-btn{
+    background-color: #fe424d !important;
+    border: none;
+}
+
+/* show page */
+.show-img{
+    height: 30vh;
+}
+.btns{
+    display: flex;
+}
+
+.show-card{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* map */
+#map {
+    height: 400px;
+    width: 80vh;
+    border-radius: 2rem;
+}
+.mapboxgl-popup-content{
+    border-radius: 1.5rem !important;
+    padding: 5px 5px 5px 5px !important;
+    text-align: center;
+}
+
+
+.map-class .mapboxgl-popup-close-button {
+   /*  width: 32px;
+    height: 32px; */
+    /* top: 8px;
+    right: 8px; */
+
+    border: none;
+    border-radius: 50%;
+    color: #334155;
+
+    font-size: 20px;
+    line-height: 28px;
+   /*  cursor: pointer; */
+
+    transition: all 0.3s ease;
+}
+
+.custom-marker {
+    width: 48px;
+    height: 48px;
+    background: #ff385c;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 2px 8px #0003;
+    cursor: pointer;
+}
+
+/* .custom-marker::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 56, 92, 0.18);
+    z-index: -1;
+    pointer-events: none;
+} */
+
+/* Search bar custom styling */
+
+
+
+/* Search container */
+.navbar-nav form[role="search"] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Search input */
+.navbar-nav form[role="search"] .form-control {
+    width: 220px;
+    height: 44px;
+    padding: 10px 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 50px;
+    font-size: 14px;
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+
+/* Input focus effect */
+.navbar-nav form[role="search"] .form-control:focus {
+    border-color: #ff385c;
+    box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.12);
+}
+
+/* Search button */
+.navbar-nav form[role="search"] .btn-outline-success {
+    height: 44px;
+    padding: 0 22px;
+    border: 1px solid #ff385c;
+    border-radius: 50px;
+    background-color: #ff385c;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+/* Button hover */
+.navbar-nav form[role="search"] .btn-outline-success:hover {
+    background-color: #e31c5f;
+    border-color: #e31c5f;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Mobile responsive */
+@media (max-width: 767px) {
+    .navbar-nav form[role="search"] {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .navbar-nav form[role="search"] .form-control {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* tax switch aur filter ka styling hai */
+.category{
+        text-decoration: none !important;
+        color: inherit !important;
+    }
+    /* New wrapper to hold the fixed arrows and scrollable filters side-by-side */
+    .filters-main {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    #filters {
+        display: flex;
+        /* Removed flex-wrap: wrap; so items stay in one line */
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none; /* Firefox */
+        flex-grow: 1;
+    }
+
+    #filters::-webkit-scrollbar {
+        display: none; /* Safari/Chrome */
+    }
+
+    .filter {
+        text-align: center;
+        margin-right: 2.5rem;
+        opacity: 0.7;
+        flex-shrink: 0; /* Prevents the icons from squeezing */
+    }
+
+    .filter:hover {
+        opacity: 1;
+        cursor: pointer;
+        
+    }
+
+    .filter-arrow {
+        flex: 0 0 auto;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 10px;
+    }
+    
+    .filter-arrow:hover {
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+    .filter p {
+        margin-bottom: 0 !important; /* Bootstrap ka default gap hatane ke liye */
+        margin-top: 0.4rem; /* Icon aur text ke beech halka gap */
+        font-size: 0.9rem;
+    }
+
+
+    .tax-toggle {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 0.8rem 1rem;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0; /* Toggle switch ko choti screen par pichakne se bachayega */
+    }
+    
+    .tax-toggle:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Checkbox aur label ke beech ki margin hatane ke liye */
+    .tax-toggle .form-check-label {
+        margin-bottom: 0;
+        cursor: pointer;
+        font-weight: 500;
+        margin-right: 10px;
+    }
+
+    .tax-info {
+        display: none; /* By default chupa rahega */
+        font-size: 0.9rem;
+        color: #717171; /* Halka grey color taaki neat lage */
+    }
