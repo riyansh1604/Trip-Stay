@@ -1,0 +1,856 @@
+<% layout("/layouts/minimal.ejs") %>
+
+<style>
+  /* ===== Facebook Page – Trip Stay ===== */
+  :root {
+    --fb-blue: #1877F2;
+    --fb-dark: #1a1a2e;
+    --fb-bg: #f0f2f5;
+    --fb-white: #ffffff;
+    --fb-text: #050505;
+    --fb-secondary: #65676b;
+    --fb-border: #e4e6eb;
+    --fb-hover: #f2f3f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  .fb-page-wrapper {
+    background: var(--fb-bg);
+    min-height: 100vh;
+    padding-bottom: 40px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--fb-text);
+  }
+
+  /* ---------- Top App Header ---------- */
+  .fb-top-bar {
+    background: var(--fb-white);
+    border-bottom: 1px solid var(--fb-border);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .fb-top-bar-inner {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .fb-brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .fb-logo-circle {
+    width: 40px;
+    height: 40px;
+    background: var(--fb-blue);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 800;
+    font-family: 'Segoe UI Historic', 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  .fb-logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--fb-blue);
+    letter-spacing: -0.5px;
+  }
+  .fb-top-icons {
+    display: flex;
+    gap: 12px;
+  }
+  .fb-icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--fb-hover);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .fb-icon-btn:hover { background: var(--fb-border); }
+
+  /* ---------- Cover Photo ---------- */
+  .fb-cover-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .fb-cover {
+    width: 100%;
+    height: 350px;
+    border-radius: 0 0 12px 12px;
+    background: linear-gradient(135deg, #1877F2 0%, #6C63FF 40%, #a855f7 70%, #ec4899 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fb-cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .fb-cover-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    padding: 0 16px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.35);
+  }
+
+  .fb-cover-text h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+
+  .fb-cover-text p {
+    font-size: 1.15rem;
+    margin-top: 6px;
+    font-weight: 500;
+    opacity: .95;
+  }
+
+  /* ---------- Profile Header ---------- */
+  .fb-profile-header {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--fb-white);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    padding: 0 28px 16px;
+    position: relative;
+  }
+
+  .fb-profile-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+  }
+
+  .fb-profile-pic {
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    border: 5px solid var(--fb-white);
+    background: linear-gradient(135deg, #1877F2, #6C63FF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-top: -84px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+
+  .fb-profile-info {
+    flex: 1;
+    min-width: 220px;
+    padding-bottom: 4px;
+  }
+
+  .fb-profile-name {
+    font-size: 1.85rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .fb-verified {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fb-blue);
+    color: #fff;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .fb-category {
+    color: var(--fb-secondary);
+    font-size: .95rem;
+    margin-top: 4px;
+  }
+
+  .fb-stats {
+    color: var(--fb-secondary);
+    font-size: .95rem;
+    margin-top: 2px;
+  }
+
+  .fb-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-bottom: 6px;
+  }
+
+  .fb-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: .94rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: filter .15s;
+    white-space: nowrap;
+  }
+
+  .fb-btn:hover {
+    filter: brightness(.92);
+  }
+
+  .fb-btn-primary {
+    background: var(--fb-blue);
+    color: #fff;
+  }
+
+  .fb-btn-secondary {
+    background: var(--fb-border);
+    color: var(--fb-text);
+  }
+
+  /* ---------- Nav Tabs ---------- */
+  .fb-nav {
+    max-width: 1000px;
+    margin: 0 auto;
+    border-top: 1px solid var(--fb-border);
+    display: flex;
+    gap: 4px;
+    padding: 0 16px;
+    background: var(--fb-white);
+    border-radius: 0 0 8px 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .fb-nav::-webkit-scrollbar { display: none; }
+
+  .fb-nav a {
+    padding: 16px 20px;
+    font-size: .94rem;
+    font-weight: 600;
+    color: var(--fb-secondary);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: color .15s;
+  }
+
+  .fb-nav a.active {
+    color: var(--fb-blue);
+    border-bottom-color: var(--fb-blue);
+  }
+
+  .fb-nav a:hover {
+    background: var(--fb-hover);
+    border-radius: 8px 8px 0 0;
+  }
+
+  /* ---------- Content Grid ---------- */
+  .fb-content {
+    max-width: 1000px;
+    margin: 16px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    align-items: start;
+    padding: 0 8px;
+  }
+
+  /* ---------- Cards ---------- */
+  .fb-card {
+    background: var(--fb-white);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .fb-card-header {
+    padding: 16px 16px 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  /* ---------- Post ---------- */
+  .fb-post-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 0;
+  }
+
+  .fb-post-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1877F2, #6C63FF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+    flex-shrink: 0;
+  }
+
+  .fb-post-meta {
+    line-height: 1.3;
+  }
+
+  .fb-post-author {
+    font-weight: 600;
+    font-size: .95rem;
+  }
+
+  .fb-post-time {
+    font-size: .8rem;
+    color: var(--fb-secondary);
+  }
+
+  .fb-post-body {
+    padding: 10px 16px 12px;
+    font-size: .95rem;
+    line-height: 1.5;
+  }
+
+  .fb-post-image {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,.9);
+    font-size: 1rem;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  .fb-post-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    color: var(--fb-secondary);
+    font-size: .85rem;
+  }
+
+  .fb-post-stats span {
+    cursor: pointer;
+  }
+
+  .fb-post-stats span:hover {
+    text-decoration: underline;
+  }
+
+  .fb-post-actions {
+    display: flex;
+    border-top: 1px solid var(--fb-border);
+    margin: 0 16px;
+  }
+
+  .fb-post-action {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 4px;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--fb-secondary);
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 4px 2px;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+
+  .fb-post-action:hover {
+    background: var(--fb-hover);
+  }
+
+  /* ---------- Sidebar ---------- */
+  .fb-sidebar {
+    position: sticky;
+    top: 68px;
+  }
+
+  .fb-about-list {
+    list-style: none;
+    padding: 0 16px 16px;
+    margin: 0;
+  }
+
+  .fb-about-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: .9rem;
+    color: var(--fb-text);
+    line-height: 1.45;
+  }
+
+  .fb-about-list li .icon {
+    flex-shrink: 0;
+    width: 22px;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .fb-about-list a {
+    color: var(--fb-blue);
+    text-decoration: none;
+  }
+
+  .fb-about-list a:hover {
+    text-decoration: underline;
+  }
+
+  .fb-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 0 16px 16px;
+  }
+
+  .fb-photo-thumb {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+
+  .fb-photo-thumb:hover {
+    opacity: .85;
+  }
+
+  /* ===================================================
+     MEDIA QUERIES: DESKTOP, TABLET, PHONE
+     =================================================== */
+
+  /* ---------- Tablet (641px – 991px) ---------- */
+  @media (min-width: 641px) and (max-width: 991px) {
+    .fb-cover {
+      height: 260px;
+    }
+    .fb-cover-text h1 {
+      font-size: 2rem;
+    }
+    .fb-profile-header {
+      padding: 0 20px 16px;
+    }
+    .fb-profile-pic {
+      width: 130px;
+      height: 130px;
+      margin-top: -65px;
+      font-size: 2.5rem;
+    }
+    .fb-profile-name {
+      font-size: 1.5rem;
+    }
+    .fb-content {
+      grid-template-columns: 1fr 280px;
+      gap: 12px;
+      padding: 0 12px;
+    }
+    .fb-sidebar {
+      position: static;
+    }
+  }
+
+  /* ---------- Phone (<= 640px) ---------- */
+  @media (max-width: 640px) {
+    .fb-cover {
+      height: 180px;
+      border-radius: 0;
+    }
+
+    .fb-cover-text h1 {
+      font-size: 1.4rem;
+    }
+
+    .fb-cover-text p {
+      font-size: .88rem;
+    }
+
+    .fb-profile-header {
+      padding: 0 12px 14px;
+      border-radius: 0;
+    }
+
+    .fb-profile-row {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      padding-top: 0;
+    }
+
+    .fb-profile-pic {
+      width: 104px;
+      height: 104px;
+      margin-top: -52px;
+      font-size: 2rem;
+    }
+
+    .fb-profile-info {
+      text-align: center;
+      min-width: 100%;
+    }
+
+    .fb-profile-name {
+      font-size: 1.35rem;
+      justify-content: center;
+    }
+
+    .fb-category {
+      font-size: .85rem;
+    }
+
+    .fb-stats {
+      font-size: .85rem;
+    }
+
+    /* Action buttons take full width across phone */
+    .fb-actions {
+      width: 100%;
+      display: flex;
+      gap: 6px;
+      justify-content: stretch;
+      padding-bottom: 0;
+    }
+
+    .fb-btn {
+      flex: 1;
+      padding: 8px 4px;
+      font-size: .85rem;
+      gap: 4px;
+    }
+
+    .fb-nav {
+      padding: 0 8px;
+      border-radius: 0;
+    }
+
+    .fb-nav a {
+      padding: 12px 14px;
+      font-size: .85rem;
+    }
+
+    /* Single column feed on phone */
+    .fb-content {
+      grid-template-columns: 1fr;
+      padding: 0 4px;
+      margin-top: 8px;
+    }
+
+    .fb-card {
+      border-radius: 0;
+      margin-bottom: 8px;
+    }
+
+    .fb-post-image {
+      height: 210px;
+      font-size: .9rem;
+    }
+
+    .fb-post-stats {
+      padding: 8px 12px;
+      font-size: .8rem;
+    }
+
+    .fb-post-actions {
+      margin: 0 8px;
+    }
+
+    .fb-post-action {
+      font-size: .82rem;
+      padding: 8px 2px;
+      gap: 4px;
+    }
+
+    .fb-sidebar {
+      position: static;
+    }
+  }
+
+  /* Very small screens (<= 360px) */
+  @media (max-width: 360px) {
+    .fb-btn {
+      font-size: .78rem;
+      padding: 7px 2px;
+    }
+    .fb-post-action {
+      font-size: .75rem;
+    }
+  }
+</style>
+
+<div class="fb-page-wrapper">
+
+  <!-- ========== Top App Header ========== -->
+  <header class="fb-top-bar">
+    <div class="fb-top-bar-inner">
+      <div class="fb-brand-logo">
+        <div class="fb-logo-circle">f</div>
+        <span class="fb-logo-text">facebook</span>
+      </div>
+      <div class="fb-top-icons">
+        <button class="fb-icon-btn" title="Search">🔍</button>
+        <button class="fb-icon-btn" title="Messenger">💬</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== Cover Photo ========== -->
+  <div class="fb-cover-container">
+    <div class="fb-cover">
+      <div class="fb-cover-text">
+        <h1>Trip Stay</h1>
+        <p>Your Home Away From Home</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Profile Header ========== -->
+  <div class="fb-profile-header">
+    <div class="fb-profile-row">
+      <div class="fb-profile-pic">TS</div>
+
+      <div class="fb-profile-info">
+        <h2 class="fb-profile-name">
+          Trip Stay
+          <span class="fb-verified" title="Verified">✓</span>
+        </h2>
+        <div class="fb-category">Travel &amp; Tourism · Vacation Home Rental</div>
+        <div class="fb-stats">48K likes · 52K followers</div>
+      </div>
+
+      <div class="fb-actions">
+        <button class="fb-btn fb-btn-primary">👍 Like</button>
+        <button class="fb-btn fb-btn-secondary">💬 Message</button>
+        <button class="fb-btn fb-btn-secondary">↗ Share</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Nav Tabs ========== -->
+  <div class="fb-nav">
+    <a href="#" class="active">Posts</a>
+    <a href="#">About</a>
+    <a href="#">Photos</a>
+    <a href="#">Reviews</a>
+    <a href="#">Videos</a>
+    <a href="#">More</a>
+  </div>
+
+  <!-- ========== Main Content ========== -->
+  <div class="fb-content">
+
+    <!-- ---- Feed ---- -->
+    <div class="fb-feed">
+
+      <!-- Post 1 -->
+      <div class="fb-card">
+        <div class="fb-post-head">
+          <div class="fb-post-avatar">TS</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-author">Trip Stay <span class="fb-verified" title="Verified" style="font-size:11px;width:16px;height:16px;">✓</span></div>
+            <div class="fb-post-time">2 hours ago · 🌐</div>
+          </div>
+        </div>
+        <div class="fb-post-body">
+          🎉 Exciting news! We just crossed <strong>10,000 bookings</strong> this month! Thank you for trusting Trip Stay for your travels. 🙏
+        </div>
+        <div class="fb-post-image" style="background: linear-gradient(135deg, #f6d365, #fda085, #f5af19);">
+          🎊 10K Bookings Celebration 🎊
+        </div>
+        <div class="fb-post-stats">
+          <span>👍❤️ 2.4K</span>
+          <span>186 Comments · 312 Shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <div class="fb-post-action">👍 Like</div>
+          <div class="fb-post-action">💬 Comment</div>
+          <div class="fb-post-action">↗ Share</div>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="fb-card">
+        <div class="fb-post-head">
+          <div class="fb-post-avatar">TS</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-author">Trip Stay <span class="fb-verified" title="Verified" style="font-size:11px;width:16px;height:16px;">✓</span></div>
+            <div class="fb-post-time">Yesterday at 4:30 PM · 🌐</div>
+          </div>
+        </div>
+        <div class="fb-post-body">
+          🏔️ Discover the magic of <strong>Manali</strong> with our handpicked mountain retreats. Book now and get <strong>20% off!</strong> 🎿
+        </div>
+        <div class="fb-post-image" style="background: linear-gradient(135deg, #11998e, #38ef7d, #2d6a4f);">
+          🏔️ Manali Mountain Retreats
+        </div>
+        <div class="fb-post-stats">
+          <span>👍❤️ 1.8K</span>
+          <span>94 Comments · 208 Shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <div class="fb-post-action">👍 Like</div>
+          <div class="fb-post-action">💬 Comment</div>
+          <div class="fb-post-action">↗ Share</div>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="fb-card">
+        <div class="fb-post-head">
+          <div class="fb-post-avatar">TS</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-author">Trip Stay <span class="fb-verified" title="Verified" style="font-size:11px;width:16px;height:16px;">✓</span></div>
+            <div class="fb-post-time">2 days ago · 🌐</div>
+          </div>
+        </div>
+        <div class="fb-post-body">
+          📸 Guest spotlight! <strong>@traveler_rohan</strong> shared this amazing view from his Trip Stay in <strong>Goa</strong>. Tag us in your photos! 🌊
+        </div>
+        <div class="fb-post-image" style="background: linear-gradient(135deg, #0077b6, #00b4d8, #90e0ef);">
+          🌊 Goa Beach View – Guest Photo
+        </div>
+        <div class="fb-post-stats">
+          <span>👍❤️😍 3.1K</span>
+          <span>247 Comments · 419 Shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <div class="fb-post-action">👍 Like</div>
+          <div class="fb-post-action">💬 Comment</div>
+          <div class="fb-post-action">↗ Share</div>
+        </div>
+      </div>
+
+      <!-- Post 4 -->
+      <div class="fb-card">
+        <div class="fb-post-head">
+          <div class="fb-post-avatar">TS</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-author">Trip Stay <span class="fb-verified" title="Verified" style="font-size:11px;width:16px;height:16px;">✓</span></div>
+            <div class="fb-post-time">3 days ago · 🌐</div>
+          </div>
+        </div>
+        <div class="fb-post-body">
+          💡 <strong>Travel tip:</strong> Always check reviews before booking. On Trip Stay, every review is verified! ⭐
+        </div>
+        <div class="fb-post-image" style="background: linear-gradient(135deg, #fbc531, #f9ca24, #f0932b);">
+          ⭐ Verified Reviews – Trust Trip Stay
+        </div>
+        <div class="fb-post-stats">
+          <span>👍 956</span>
+          <span>62 Comments · 134 Shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <div class="fb-post-action">👍 Like</div>
+          <div class="fb-post-action">💬 Comment</div>
+          <div class="fb-post-action">↗ Share</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- end feed -->
+
+    <!-- ---- Sidebar ---- -->
+    <div class="fb-sidebar">
+
+      <!-- About -->
+      <div class="fb-card">
+        <div class="fb-card-header">About</div>
+        <ul class="fb-about-list">
+          <li>
+            <span class="icon">ℹ️</span>
+            <span>Trip Stay is India's favourite vacation rental platform — discover unique stays from mountains to beaches, all verified &amp; trusted.</span>
+          </li>
+          <li>
+            <span class="icon">🌐</span>
+            <span><a href="#">www.tripstay.com</a></span>
+          </li>
+          <li>
+            <span class="icon">📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span class="icon">📧</span>
+            <span><a href="mailto:support@tripstay.com">support@tripstay.com</a></span>
+          </li>
+          <li>
+            <span class="icon">🕐</span>
+            <span>Open 24 hours</span>
+          </li>
+          <li>
+            <span class="icon">📍</span>
+            <span>New Delhi, India</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Photos -->
+      <div class="fb-card">
+        <div class="fb-card-header" style="display:flex;justify-content:space-between;align-items:center;">
+          Photos
+          <a href="#" style="font-size:.9rem;font-weight:600;color:#1877F2;text-decoration:none;">See all</a>
+        </div>
+        <div class="fb-photos-grid">
+          <div class="fb-photo-thumb" style="background:linear-gradient(135deg,#ee5a24,#f0932b);"></div>
+          <div class="fb-photo-thumb" style="background:linear-gradient(135deg,#6ab04c,#badc58);"></div>
+          <div class="fb-photo-thumb" style="background:linear-gradient(135deg,#0077b6,#90e0ef);"></div>
+          <div class="fb-photo-thumb" style="background:linear-gradient(135deg,#6C63FF,#a855f7);"></div>
+          <div class="fb-photo-thumb" style="background:linear-gradient(135deg,#e17055,#fab1a0);"></div>
+          <div class="fb-photo-thumb" style="background:linear-gradient(135deg,#00b894,#55efc4);"></div>
+        </div>
+      </div>
+
+    </div>
+    <!-- end sidebar -->
+
+  </div>
+  <!-- end content -->
+
+</div>

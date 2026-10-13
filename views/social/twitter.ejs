@@ -1,0 +1,786 @@
+<% layout("/layouts/minimal.ejs") %>
+
+<style>
+  /* ===== Twitter/X Profile Page Styles ===== */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .x-page {
+    background: #ffffff;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f1419;
+    line-height: 1.4;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 3-Column Desktop Shell */
+  .x-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1240px;
+    min-height: 100vh;
+  }
+
+  /* ─── LEFT SIDEBAR (Desktop / Tablet) ─── */
+  .x-left-sidebar {
+    width: 250px;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #eff3f4;
+    flex-shrink: 0;
+  }
+  .x-nav-brand {
+    font-size: 26px;
+    font-weight: 900;
+    padding: 8px 12px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 8px;
+    width: fit-content;
+  }
+  .x-nav-brand:hover { background: rgba(15,20,25,0.08); }
+
+  .x-nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .x-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-radius: 9999px;
+    font-size: 19px;
+    font-weight: 600;
+    color: #0f1419;
+    text-decoration: none;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .x-nav-item:hover { background: rgba(15,20,25,0.08); }
+  .x-nav-item.active { font-weight: 800; }
+  .x-nav-icon { font-size: 20px; width: 26px; text-align: center; }
+
+  .x-post-pill {
+    margin-top: 16px;
+    background: #1d9bf0;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    padding: 14px 0;
+    font-size: 17px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(29,155,240,0.25);
+    transition: background 0.2s;
+  }
+  .x-post-pill:hover { background: #1a8cd8; }
+
+  /* ─── MAIN FEED CONTAINER (Center) ─── */
+  .x-container {
+    width: 100%;
+    max-width: 600px;
+    border-right: 1px solid #eff3f4;
+    min-height: 100vh;
+    flex-shrink: 0;
+  }
+
+  /* --- Top Bar --- */
+  .x-topbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid #eff3f4;
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(12px);
+    z-index: 10;
+  }
+  .x-topbar-back {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #0f1419;
+    transition: background 0.2s;
+  }
+  .x-topbar-back:hover { background: rgba(15,20,25,0.1); }
+  .x-topbar-info { margin-left: 20px; }
+  .x-topbar-info h2 { font-size: 20px; font-weight: 800; margin: 0; line-height: 1.2; }
+  .x-topbar-info span { font-size: 13px; color: #536471; }
+
+  /* --- Banner --- */
+  .x-banner {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #0a1628 0%, #0d2137 25%, #1a1a2e 50%, #16213e 75%, #0f0f0f 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .x-banner::before {
+    content: '✈️';
+    position: absolute;
+    font-size: 60px;
+    top: 30px;
+    right: 60px;
+    opacity: 0.12;
+  }
+  .x-banner::after {
+    content: '🌍';
+    position: absolute;
+    font-size: 80px;
+    bottom: 20px;
+    left: 40px;
+    opacity: 0.08;
+  }
+
+  /* --- Profile Section --- */
+  .x-profile-section {
+    padding: 0 16px;
+    position: relative;
+  }
+  .x-avatar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: -42px;
+  }
+  .x-avatar {
+    width: 134px;
+    height: 134px;
+    border-radius: 50%;
+    border: 4px solid #ffffff;
+    background: linear-gradient(135deg, #1d9bf0, #0a66c2, #1a1a2e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+  .x-follow-btn {
+    margin-top: 54px;
+    padding: 8px 24px;
+    background: #0f1419;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .x-follow-btn:hover { background: #272c30; }
+
+  /* --- Profile Info --- */
+  .x-profile-info { margin-top: 12px; }
+  .x-display-name {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .x-display-name h1 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .x-verified {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #f4af01;
+    border-radius: 50%;
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 700;
+    margin-left: 2px;
+  }
+  .x-handle {
+    font-size: 15px;
+    color: #536471;
+    margin-top: 2px;
+    margin-bottom: 12px;
+  }
+  .x-bio {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    white-space: pre-line;
+  }
+  .x-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 14px;
+    color: #536471;
+    margin-bottom: 12px;
+  }
+  .x-meta-item { display: flex; align-items: center; gap: 4px; }
+  .x-follow-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: #536471;
+    margin-bottom: 16px;
+  }
+  .x-follow-stats strong { color: #0f1419; font-weight: 700; }
+
+  /* --- Tabs --- */
+  .x-tabs {
+    display: flex;
+    border-bottom: 1px solid #eff3f4;
+  }
+  .x-tab {
+    flex: 1;
+    text-align: center;
+    padding: 16px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #536471;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+  }
+  .x-tab:hover { background: rgba(15,20,25,0.05); }
+  .x-tab.active { color: #0f1419; font-weight: 700; }
+  .x-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 4px;
+    background: #1d9bf0;
+    border-radius: 9999px;
+  }
+
+  /* --- Tweets / Feed --- */
+  .x-tweet {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eff3f4;
+    display: flex;
+    gap: 12px;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .x-tweet:hover { background: rgba(0,0,0,0.02); }
+  .x-tweet-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1d9bf0, #0a66c2, #1a1a2e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+  .x-tweet-body { flex: 1; min-width: 0; }
+  .x-tweet-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .x-tweet-name { font-weight: 700; font-size: 15px; }
+  .x-tweet-verified {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: #f4af01;
+    border-radius: 50%;
+    font-size: 10px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .x-tweet-handle { color: #536471; font-size: 14px; }
+  .x-tweet-content {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-top: 4px;
+    white-space: pre-line;
+    word-break: break-word;
+  }
+  .x-tweet-content a {
+    color: #1d9bf0;
+    text-decoration: none;
+  }
+  .x-tweet-content a:hover { text-decoration: underline; }
+  .x-tweet-timestamp {
+    font-size: 13px;
+    color: #536471;
+    margin-top: 8px;
+  }
+  .x-tweet-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #536471;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid #eff3f4;
+  }
+  .x-tweet-stats span strong { color: #0f1419; }
+
+  /* --- Tweet Actions --- */
+  .x-tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    max-width: 440px;
+  }
+  .x-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #536471;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 9999px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .x-action:hover { background: rgba(29,155,240,0.1); color: #1d9bf0; }
+  .x-action.retweet:hover { background: rgba(0,186,124,0.1); color: #00ba7c; }
+  .x-action.like:hover { background: rgba(249,24,128,0.1); color: #f91880; }
+  .x-action .x-action-icon { font-size: 15px; }
+
+  /* --- Hashtags --- */
+  .hashtag { color: #1d9bf0; }
+
+  /* ─── RIGHT SIDEBAR (Desktop >= 1024px) ─── */
+  .x-right-sidebar {
+    width: 320px;
+    padding: 12px 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .x-search-box {
+    background: #eff3f4;
+    border-radius: 9999px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #536471;
+    font-size: 14px;
+  }
+  .x-widget-card {
+    background: #f7f9f9;
+    border-radius: 16px;
+    padding: 14px 16px;
+  }
+  .x-widget-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .x-trend-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eff3f4;
+  }
+  .x-trend-item:last-child { border-bottom: none; }
+  .x-trend-meta { font-size: 12px; color: #536471; }
+  .x-trend-name { font-size: 15px; font-weight: 700; color: #0f1419; margin: 2px 0; }
+
+  /* ===================================================
+     MEDIA QUERIES: DESKTOP, TABLET, PHONE
+     =================================================== */
+
+  /* ── Desktop Large (> 1100px): All 3 columns visible ── */
+
+  /* ── Desktop / Tablet Medium (768px – 1100px) ── */
+  @media (max-width: 1100px) {
+    .x-right-sidebar {
+      display: none;
+    }
+  }
+
+  /* ── Tablet (641px – 900px): Mini Left Sidebar ── */
+  @media (min-width: 641px) and (max-width: 900px) {
+    .x-left-sidebar {
+      width: 72px;
+      padding: 12px 8px;
+      align-items: center;
+    }
+    .x-nav-item span:not(.x-nav-icon) {
+      display: none;
+    }
+    .x-nav-item {
+      padding: 12px;
+      justify-content: center;
+    }
+    .x-post-pill {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .x-post-pill span {
+      display: none;
+    }
+    .x-post-pill::after {
+      content: '✏️';
+      font-size: 18px;
+    }
+  }
+
+  /* ── Phone (<= 640px): 100% Mobile Feed ── */
+  @media (max-width: 640px) {
+    .x-left-sidebar {
+      display: none;
+    }
+    .x-right-sidebar {
+      display: none;
+    }
+    .x-container {
+      max-width: 100%;
+      border-left: none;
+      border-right: none;
+    }
+    .x-banner {
+      height: 140px;
+    }
+    .x-avatar {
+      width: 86px;
+      height: 86px;
+      font-size: 26px;
+      border-width: 3px;
+    }
+    .x-avatar-row {
+      margin-top: -30px;
+    }
+    .x-follow-btn {
+      margin-top: 38px;
+      padding: 6px 18px;
+      font-size: 13px;
+    }
+    .x-display-name h1 {
+      font-size: 18px;
+    }
+    .x-bio {
+      font-size: 14px;
+    }
+    .x-meta {
+      font-size: 13px;
+      gap: 10px;
+    }
+    .x-follow-stats {
+      font-size: 13px;
+    }
+    .x-tab {
+      padding: 12px 0;
+      font-size: 14px;
+    }
+    .x-tweet {
+      padding: 10px 12px;
+      gap: 10px;
+    }
+    .x-tweet-avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 12px;
+    }
+    .x-tweet-name {
+      font-size: 14px;
+    }
+    .x-tweet-handle {
+      font-size: 13px;
+    }
+    .x-tweet-content {
+      font-size: 14px;
+    }
+    .x-tweet-actions {
+      max-width: 100%;
+      gap: 0;
+    }
+    .x-action {
+      padding: 4px 4px;
+      font-size: 12px;
+    }
+  }
+
+  /* Very small screens (<= 360px) */
+  @media (max-width: 360px) {
+    .x-action {
+      font-size: 11px;
+      padding: 2px 2px;
+    }
+    .x-tweet-actions {
+      font-size: 11px;
+    }
+  }
+</style>
+
+<div class="x-page">
+  <div class="x-layout">
+
+    <!-- ── LEFT SIDEBAR (Desktop & Tablet) ── -->
+    <aside class="x-left-sidebar">
+      <div>
+        <div class="x-nav-brand">𝕏</div>
+        <nav class="x-nav-menu">
+          <a class="x-nav-item" href="#"><span class="x-nav-icon">🏠</span><span>Home</span></a>
+          <a class="x-nav-item" href="#"><span class="x-nav-icon">🔍</span><span>Explore</span></a>
+          <a class="x-nav-item" href="#"><span class="x-nav-icon">🔔</span><span>Notifications</span></a>
+          <a class="x-nav-item" href="#"><span class="x-nav-icon">✉️</span><span>Messages</span></a>
+          <a class="x-nav-item" href="#"><span class="x-nav-icon">🔖</span><span>Bookmarks</span></a>
+          <a class="x-nav-item active" href="#"><span class="x-nav-icon">👤</span><span>Profile</span></a>
+        </nav>
+        <button class="x-post-pill"><span>Post</span></button>
+      </div>
+    </aside>
+
+    <!-- ── CENTER FEED CONTAINER ── -->
+    <main class="x-container">
+      <!-- Top Bar -->
+      <div class="x-topbar">
+        <div class="x-topbar-back">←</div>
+        <div class="x-topbar-info">
+          <h2>Trip Stay</h2>
+          <span>2,847 posts</span>
+        </div>
+      </div>
+
+      <!-- Banner -->
+      <div class="x-banner"></div>
+
+      <!-- Profile Section -->
+      <div class="x-profile-section">
+        <div class="x-avatar-row">
+          <div class="x-avatar">TS</div>
+          <button class="x-follow-btn">Follow</button>
+        </div>
+
+        <div class="x-profile-info">
+          <div class="x-display-name">
+            <h1>Trip Stay</h1>
+            <span class="x-verified">✓</span>
+          </div>
+          <p class="x-handle">@TripStayOfficial</p>
+          <p class="x-bio">Your perfect stay, everywhere you go ✈️ | 🏠 Book unique homes & experiences across India | 📩 support@tripstay.com | 🔗 tripstay.com</p>
+          <div class="x-meta">
+            <span class="x-meta-item">📍 India</span>
+            <span class="x-meta-item">🗓️ Joined January 2023</span>
+          </div>
+          <div class="x-follow-stats">
+            <span><strong>1,247</strong> Following</span>
+            <span><strong>38.9K</strong> Followers</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="x-tabs">
+        <div class="x-tab active">Posts</div>
+        <div class="x-tab">Replies</div>
+        <div class="x-tab">Media</div>
+        <div class="x-tab">Likes</div>
+      </div>
+
+      <!-- Tweet 1 -->
+      <div class="x-tweet">
+        <div class="x-tweet-avatar">TS</div>
+        <div class="x-tweet-body">
+          <div class="x-tweet-header">
+            <span class="x-tweet-name">Trip Stay</span>
+            <span class="x-tweet-verified">✓</span>
+            <span class="x-tweet-handle">@TripStayOfficial</span>
+          </div>
+          <div class="x-tweet-content">Just launched 500+ new properties across Rajasthan! 🏰 From heritage havelis to desert camps, your royal stay awaits. Book now → <a href="#">tripstay.com</a>
+
+<span class="hashtag">#TripStay</span> <span class="hashtag">#Rajasthan</span> <span class="hashtag">#Travel</span></div>
+          <div class="x-tweet-timestamp">12:30 PM · Oct 10, 2026</div>
+          <div class="x-tweet-stats">
+            <span><strong>234</strong> Retweets</span>
+            <span><strong>1.2K</strong> Likes</span>
+          </div>
+          <div class="x-tweet-actions">
+            <span class="x-action"><span class="x-action-icon">💬</span> 48</span>
+            <span class="x-action retweet"><span class="x-action-icon">🔁</span> 234</span>
+            <span class="x-action like"><span class="x-action-icon">❤️</span> 1.2K</span>
+            <span class="x-action"><span class="x-action-icon">📊</span> 45.6K</span>
+            <span class="x-action"><span class="x-action-icon">🔖</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tweet 2 -->
+      <div class="x-tweet">
+        <div class="x-tweet-avatar">TS</div>
+        <div class="x-tweet-body">
+          <div class="x-tweet-header">
+            <span class="x-tweet-name">Trip Stay</span>
+            <span class="x-tweet-verified">✓</span>
+            <span class="x-tweet-handle">@TripStayOfficial</span>
+          </div>
+          <div class="x-tweet-content">Pro tip: The best travel deals drop on Tuesday mornings 👀
+
+Set your alarms, wanderers! ⏰</div>
+          <div class="x-tweet-timestamp">9:15 AM · Oct 9, 2026</div>
+          <div class="x-tweet-stats">
+            <span><strong>892</strong> Retweets</span>
+            <span><strong>4.7K</strong> Likes</span>
+          </div>
+          <div class="x-tweet-actions">
+            <span class="x-action"><span class="x-action-icon">💬</span> 213</span>
+            <span class="x-action retweet"><span class="x-action-icon">🔁</span> 892</span>
+            <span class="x-action like"><span class="x-action-icon">❤️</span> 4.7K</span>
+            <span class="x-action"><span class="x-action-icon">📊</span> 128K</span>
+            <span class="x-action"><span class="x-action-icon">🔖</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tweet 3 -->
+      <div class="x-tweet">
+        <div class="x-tweet-avatar">TS</div>
+        <div class="x-tweet-body">
+          <div class="x-tweet-header">
+            <span class="x-tweet-name">Trip Stay</span>
+            <span class="x-tweet-verified">✓</span>
+            <span class="x-tweet-handle">@TripStayOfficial</span>
+          </div>
+          <div class="x-tweet-content">Guest review of the day ⭐⭐⭐⭐⭐
+
+'The mountain cabin in Shimla was absolutely magical. Woke up to snow-covered peaks every morning. 10/10 would book again!' - <a href="#">@mountain_lover</a></div>
+          <div class="x-tweet-timestamp">3:45 PM · Oct 8, 2026</div>
+          <div class="x-tweet-stats">
+            <span><strong>156</strong> Retweets</span>
+            <span><strong>2.1K</strong> Likes</span>
+          </div>
+          <div class="x-tweet-actions">
+            <span class="x-action"><span class="x-action-icon">💬</span> 67</span>
+            <span class="x-action retweet"><span class="x-action-icon">🔁</span> 156</span>
+            <span class="x-action like"><span class="x-action-icon">❤️</span> 2.1K</span>
+            <span class="x-action"><span class="x-action-icon">📊</span> 78.3K</span>
+            <span class="x-action"><span class="x-action-icon">🔖</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tweet 4 -->
+      <div class="x-tweet">
+        <div class="x-tweet-avatar">TS</div>
+        <div class="x-tweet-body">
+          <div class="x-tweet-header">
+            <span class="x-tweet-name">Trip Stay</span>
+            <span class="x-tweet-verified">✓</span>
+            <span class="x-tweet-handle">@TripStayOfficial</span>
+          </div>
+          <div class="x-tweet-content">🌊 Goa season is HERE!
+
+Beachfront villas starting at ₹2,999/night. Ocean views, private pools, pure vibes. 🏖️</div>
+          <div class="x-tweet-timestamp">11:00 AM · Oct 7, 2026</div>
+          <div class="x-tweet-stats">
+            <span><strong>445</strong> Retweets</span>
+            <span><strong>3.8K</strong> Likes</span>
+          </div>
+          <div class="x-tweet-actions">
+            <span class="x-action"><span class="x-action-icon">💬</span> 134</span>
+            <span class="x-action retweet"><span class="x-action-icon">🔁</span> 445</span>
+            <span class="x-action like"><span class="x-action-icon">❤️</span> 3.8K</span>
+            <span class="x-action"><span class="x-action-icon">📊</span> 92.1K</span>
+            <span class="x-action"><span class="x-action-icon">🔖</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tweet 5 -->
+      <div class="x-tweet">
+        <div class="x-tweet-avatar">TS</div>
+        <div class="x-tweet-body">
+          <div class="x-tweet-header">
+            <span class="x-tweet-name">Trip Stay</span>
+            <span class="x-tweet-verified">✓</span>
+            <span class="x-tweet-handle">@TripStayOfficial</span>
+          </div>
+          <div class="x-tweet-content">We asked: What's your dream destination? 🌍
+
+67% said mountains 🏔️
+22% said beaches 🏖️
+8% said cities 🌆
+3% said deserts 🏜️
+
+Mountains win again! 😄</div>
+          <div class="x-tweet-timestamp">5:30 PM · Oct 6, 2026</div>
+          <div class="x-tweet-stats">
+            <span><strong>678</strong> Retweets</span>
+            <span><strong>5.2K</strong> Likes</span>
+          </div>
+          <div class="x-tweet-actions">
+            <span class="x-action"><span class="x-action-icon">💬</span> 312</span>
+            <span class="x-action retweet"><span class="x-action-icon">🔁</span> 678</span>
+            <span class="x-action like"><span class="x-action-icon">❤️</span> 5.2K</span>
+            <span class="x-action"><span class="x-action-icon">📊</span> 203K</span>
+            <span class="x-action"><span class="x-action-icon">🔖</span></span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ── RIGHT SIDEBAR (Desktop >= 1100px) ── -->
+    <aside class="x-right-sidebar">
+      <div class="x-search-box">
+        <span>🔍</span>
+        <span>Search</span>
+      </div>
+
+      <div class="x-widget-card">
+        <div class="x-widget-title">What's happening</div>
+        <div class="x-trend-item">
+          <div class="x-trend-meta">Travel · Trending</div>
+          <div class="x-trend-name">#TripStay</div>
+          <div class="x-trend-meta">42.5K posts</div>
+        </div>
+        <div class="x-trend-item">
+          <div class="x-trend-meta">Trending in India</div>
+          <div class="x-trend-name">#ExploreIndia</div>
+          <div class="x-trend-meta">18.2K posts</div>
+        </div>
+        <div class="x-trend-item">
+          <div class="x-trend-meta">Travel · Trending</div>
+          <div class="x-trend-name">Goa Season</div>
+          <div class="x-trend-meta">9,410 posts</div>
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- .x-layout -->
+</div><!-- .x-page -->

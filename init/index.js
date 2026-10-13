@@ -27,7 +27,7 @@ const initDB =async () =>{
         }).send();
 
         obj.geometry = response.body.features[0]?.geometry;
-        obj.owner = "6ac666884f1986c458fa9af3";
+        obj.owner = "6ace3aac4f1835a65b22c6eb";
     };
     // initData.data = initData.data.map((obj) => ({...obj,owner:'6ac666884f1986c458fa9af3',}));
     

@@ -1,0 +1,812 @@
+<% layout("/layouts/minimal.ejs") %>
+
+<style>
+  /* ── Reset & Base ── */
+  .ig-page * { box-sizing: border-box; margin: 0; padding: 0; }
+  .ig-page {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #fafafa;
+    color: #262626;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ── Top Nav Bar ── */
+  .ig-nav {
+    background: #fff;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .ig-nav-inner {
+    max-width: 935px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ig-logo {
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .ig-nav-search {
+    display: none;
+    background: #efefef;
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: #8e8e8e;
+    font-size: 14px;
+    width: 240px;
+  }
+  .ig-nav-icons {
+    display: flex;
+    gap: 18px;
+    font-size: 20px;
+    align-items: center;
+  }
+  .ig-nav-icons span { cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
+  .ig-nav-icons span:hover { opacity: 1; }
+
+  /* ── Container ── */
+  .ig-container {
+    max-width: 935px;
+    margin: 0 auto;
+    padding: 30px 20px 0;
+  }
+
+  /* ── Profile Header ── */
+  .ig-profile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 30px;
+  }
+  .ig-avatar-wrap {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ig-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 3px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .ig-profile-info { flex: 1; min-width: 0; }
+  .ig-profile-row1 {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .ig-username {
+    font-size: 22px;
+    font-weight: 400;
+    color: #262626;
+  }
+  .ig-verified {
+    color: #3897f0;
+    font-size: 18px;
+    margin-left: -8px;
+  }
+  .ig-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ig-btn-follow {
+    background: #0095f6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ig-btn-follow:hover { background: #1877f2; }
+  .ig-btn-message {
+    background: #efefef;
+    color: #262626;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ig-btn-message:hover { background: #dbdbdb; }
+  .ig-btn-more {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 6px;
+    color: #262626;
+  }
+  .ig-stats {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 16px;
+  }
+  .ig-stat { font-size: 16px; color: #262626; }
+  .ig-stat strong { font-weight: 600; }
+  .ig-display-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .ig-bio {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #262626;
+    white-space: pre-line;
+  }
+  .ig-bio a {
+    color: #00376b;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .ig-bio a:hover { text-decoration: underline; }
+  .ig-category {
+    font-size: 14px;
+    color: #8e8e8e;
+    margin-bottom: 4px;
+  }
+
+  /* ── Stories Highlights ── */
+  .ig-highlights {
+    display: flex;
+    gap: 18px;
+    padding: 10px 0 24px;
+    overflow-x: auto;
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .ig-highlights::-webkit-scrollbar { display: none; }
+  .ig-highlight-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .ig-highlight-circle {
+    width: 77px;
+    height: 77px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    padding: 2.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+  .ig-highlight-circle:hover { transform: scale(1.06); }
+  .ig-highlight-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  .ig-highlight-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: #262626;
+    max-width: 77px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Post Tabs ── */
+  .ig-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    border-top: 1px solid #dbdbdb;
+    margin-top: 0;
+  }
+  .ig-tab {
+    padding: 14px 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8e8e8e;
+    cursor: pointer;
+    border-top: 1px solid transparent;
+    margin-top: -1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .ig-tab.active {
+    color: #262626;
+    border-top-color: #262626;
+  }
+  .ig-tab:hover { color: #262626; }
+
+  /* ── Posts Grid ── */
+  .ig-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 12px;
+  }
+  .ig-post {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .ig-post-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    transition: background 0.25s;
+    z-index: 2;
+  }
+  .ig-post:hover .ig-post-overlay {
+    background: rgba(0,0,0,0.38);
+  }
+  .ig-post-stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .ig-post:hover .ig-post-stat {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ig-post-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 12px 10px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.65));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+
+  /* Post gradients */
+  .ig-post-1 { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 40%, #3e2723 100%); }
+  .ig-post-2 { background: linear-gradient(135deg, #0077b6 0%, #00b4d8 50%, #90e0ef 100%); }
+  .ig-post-3 { background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #daa520 100%); }
+  .ig-post-4 { background: linear-gradient(135deg, #ff6b35 0%, #f7797d 50%, #fbc2eb 100%); }
+  .ig-post-5 { background: linear-gradient(135deg, #00b09b 0%, #96c93d 50%, #2ecc71 100%); }
+  .ig-post-6 { background: linear-gradient(135deg, #a8c0ff 0%, #e0eafc 50%, #f0f4ff 100%); }
+  .ig-post-7 { background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #DEB887 100%); }
+  .ig-post-8 { background: linear-gradient(135deg, #0c3547 0%, #1a5276 50%, #2e86c1 100%); }
+  .ig-post-9 { background: linear-gradient(135deg, #2c003e 0%, #512b58 50%, #1a1a2e 100%); }
+
+  .ig-post-emoji {
+    font-size: 48px;
+    margin-bottom: 8px;
+    z-index: 1;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25));
+  }
+
+  /* ── Mobile Action Buttons (Hidden on desktop) ── */
+  .ig-mobile-actions {
+    display: none;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .ig-mobile-btn {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+  }
+  .ig-mobile-btn.primary { background: #0095f6; color: #fff; }
+  .ig-mobile-btn.secondary { background: #efefef; color: #262626; }
+
+  /* ── Footer ── */
+  .ig-footer {
+    text-align: center;
+    padding: 40px 20px 20px;
+    font-size: 12px;
+    color: #8e8e8e;
+  }
+  .ig-footer a {
+    color: #8e8e8e;
+    text-decoration: none;
+    margin: 0 6px;
+  }
+  .ig-footer a:hover { text-decoration: underline; }
+
+  /* ===================================================
+     MEDIA QUERIES: DESKTOP, TABLET, PHONE
+     =================================================== */
+
+  /* ── Tablet (641px – 991px) ── */
+  @media (min-width: 641px) and (max-width: 991px) {
+    .ig-container {
+      padding: 24px 20px 0;
+    }
+    .ig-profile-header {
+      gap: 28px;
+      margin-bottom: 24px;
+    }
+    .ig-avatar-wrap {
+      width: 110px;
+      height: 110px;
+    }
+    .ig-avatar {
+      font-size: 32px;
+    }
+    .ig-username {
+      font-size: 20px;
+    }
+    .ig-stats {
+      gap: 20px;
+    }
+    .ig-stat {
+      font-size: 15px;
+    }
+    .ig-grid {
+      gap: 12px;
+    }
+    .ig-post-emoji {
+      font-size: 40px;
+    }
+    .ig-highlight-circle {
+      width: 68px;
+      height: 68px;
+    }
+    .ig-highlight-inner {
+      font-size: 24px;
+    }
+  }
+
+  /* ── Phone (<= 640px) ── */
+  @media (max-width: 640px) {
+    .ig-nav {
+      padding: 10px 16px;
+    }
+    .ig-logo {
+      font-size: 22px;
+    }
+    .ig-container {
+      padding: 14px 12px 0;
+    }
+
+    /* Mobile Header Layout: Avatar + 3 Stat Counters in 1 top row */
+    .ig-profile-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .ig-mobile-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+    }
+    .ig-avatar-wrap {
+      width: 78px;
+      height: 78px;
+      padding: 2px;
+    }
+    .ig-avatar {
+      font-size: 24px;
+    }
+
+    /* Desktop elements hidden on phone */
+    .ig-desktop-actions {
+      display: none !important;
+    }
+    .ig-desktop-stats {
+      display: none !important;
+    }
+
+    /* Mobile 3-col stats next to avatar */
+    .ig-mobile-stats {
+      display: flex !important;
+      flex: 1;
+      justify-content: space-around;
+      text-align: center;
+    }
+    .ig-mobile-stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 13px;
+      color: #262626;
+    }
+    .ig-mobile-stat-item strong {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    /* Username & Bio below top row */
+    .ig-profile-info {
+      width: 100%;
+    }
+    .ig-profile-row1 {
+      margin-bottom: 6px;
+      gap: 6px;
+    }
+    .ig-username {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .ig-display-name {
+      font-size: 14px;
+    }
+    .ig-category {
+      font-size: 13px;
+    }
+    .ig-bio {
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* Mobile buttons full width side-by-side */
+    .ig-mobile-actions {
+      display: flex;
+    }
+
+    /* Stories Highlights */
+    .ig-highlights {
+      padding: 12px 0 16px;
+      gap: 12px;
+    }
+    .ig-highlight-circle {
+      width: 58px;
+      height: 58px;
+    }
+    .ig-highlight-inner {
+      font-size: 20px;
+    }
+    .ig-highlight-label {
+      font-size: 11px;
+      max-width: 58px;
+    }
+
+    /* Tabs 3 equal columns */
+    .ig-tabs {
+      gap: 0;
+    }
+    .ig-tab {
+      flex: 1;
+      justify-content: center;
+      padding: 12px 0;
+      font-size: 11px;
+    }
+
+    /* Grid 3-col compact */
+    .ig-grid {
+      gap: 3px;
+      margin-top: 3px;
+    }
+    .ig-post {
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .ig-post-emoji {
+      font-size: 28px;
+    }
+    .ig-post-label {
+      font-size: 10px;
+      padding: 12px 4px 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ig-post-stat {
+      font-size: 12px;
+      gap: 3px;
+    }
+    .ig-post-overlay {
+      gap: 10px;
+    }
+    .ig-footer {
+      padding: 24px 12px 40px;
+      font-size: 11px;
+    }
+  }
+
+  /* Very small screens (<= 380px) */
+  @media (max-width: 380px) {
+    .ig-avatar-wrap {
+      width: 68px;
+      height: 68px;
+    }
+    .ig-mobile-stat-item strong {
+      font-size: 14px;
+    }
+    .ig-mobile-stat-item {
+      font-size: 11px;
+    }
+    .ig-post-emoji {
+      font-size: 22px;
+    }
+  }
+</style>
+
+<div class="ig-page">
+
+  <!-- ── Top Nav Bar ── -->
+  <nav class="ig-nav">
+    <div class="ig-nav-inner">
+      <div class="ig-logo">Instagram</div>
+      <div class="ig-nav-icons">
+        <span title="Notifications">🔔</span>
+        <span title="Direct Messages">💬</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="ig-container">
+
+    <!-- ── Profile Header ── -->
+    <header class="ig-profile-header">
+
+      <!-- On mobile, this wrapper groups avatar + stats in 1 row -->
+      <div class="ig-mobile-top-row">
+        <div class="ig-avatar-wrap">
+          <div class="ig-avatar">TS</div>
+        </div>
+
+        <!-- Mobile-only 3-col stats -->
+        <div class="ig-mobile-stats" style="display:none;">
+          <div class="ig-mobile-stat-item">
+            <strong>1,247</strong>
+            <span>posts</span>
+          </div>
+          <div class="ig-mobile-stat-item">
+            <strong>48.5K</strong>
+            <span>followers</span>
+          </div>
+          <div class="ig-mobile-stat-item">
+            <strong>892</strong>
+            <span>following</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ig-profile-info">
+        <!-- Row 1: Username & Desktop buttons -->
+        <div class="ig-profile-row1">
+          <span class="ig-username">tripstay.official</span>
+          <span class="ig-verified" title="Verified">✔</span>
+          <div class="ig-btn-group ig-desktop-actions">
+            <button class="ig-btn-follow">Follow</button>
+            <button class="ig-btn-message">Message</button>
+            <button class="ig-btn-more">⋯</button>
+          </div>
+        </div>
+
+        <!-- Desktop stats (hidden on mobile) -->
+        <div class="ig-stats ig-desktop-stats">
+          <div class="ig-stat"><strong>1,247</strong> posts</div>
+          <div class="ig-stat"><strong>48.5K</strong> followers</div>
+          <div class="ig-stat"><strong>892</strong> following</div>
+        </div>
+
+        <!-- Profile Bio & Details -->
+        <div class="ig-display-name">Trip Stay ✈️🏠</div>
+        <div class="ig-category">Travel &amp; Accommodation Service</div>
+        <div class="ig-bio">Your perfect stay, everywhere you go 🌍
+Book unique homes &amp; experiences across India
+📍 India
+<a href="#">tripstay.com</a></div>
+
+        <!-- Mobile Action Buttons (Follow + Message 50/50) -->
+        <div class="ig-mobile-actions">
+          <button class="ig-mobile-btn primary">Follow</button>
+          <button class="ig-mobile-btn secondary">Message</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Story Highlights ── -->
+    <div class="ig-highlights">
+      <div class="ig-highlight-item">
+        <div class="ig-highlight-circle">
+          <div class="ig-highlight-inner">🏠</div>
+        </div>
+        <span class="ig-highlight-label">Stays</span>
+      </div>
+      <div class="ig-highlight-item">
+        <div class="ig-highlight-circle">
+          <div class="ig-highlight-inner">⭐</div>
+        </div>
+        <span class="ig-highlight-label">Reviews</span>
+      </div>
+      <div class="ig-highlight-item">
+        <div class="ig-highlight-circle">
+          <div class="ig-highlight-inner">🔍</div>
+        </div>
+        <span class="ig-highlight-label">Explore</span>
+      </div>
+      <div class="ig-highlight-item">
+        <div class="ig-highlight-circle">
+          <div class="ig-highlight-inner">💡</div>
+        </div>
+        <span class="ig-highlight-label">Tips</span>
+      </div>
+      <div class="ig-highlight-item">
+        <div class="ig-highlight-circle">
+          <div class="ig-highlight-inner">👥</div>
+        </div>
+        <span class="ig-highlight-label">Team</span>
+      </div>
+    </div>
+
+    <!-- ── Tabs ── -->
+    <div class="ig-tabs">
+      <div class="ig-tab active">
+        <span>▦</span> Posts
+      </div>
+      <div class="ig-tab">
+        <span>🎬</span> Reels
+      </div>
+      <div class="ig-tab">
+        <span>📌</span> Tagged
+      </div>
+    </div>
+
+    <!-- ── Posts Grid ── -->
+    <div class="ig-grid">
+
+      <div class="ig-post ig-post-1">
+        <span class="ig-post-emoji">🏔️</span>
+        <div class="ig-post-label">Mountain Retreat</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 3,842</div>
+          <div class="ig-post-stat">💬 128</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-2">
+        <span class="ig-post-emoji">🏖️</span>
+        <div class="ig-post-label">Beach Paradise</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 5,219</div>
+          <div class="ig-post-stat">💬 243</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-3">
+        <span class="ig-post-emoji">🏰</span>
+        <div class="ig-post-label">Royal Heritage</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 4,106</div>
+          <div class="ig-post-stat">💬 189</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-4">
+        <span class="ig-post-emoji">🌅</span>
+        <div class="ig-post-label">Sunset Villa</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 6,731</div>
+          <div class="ig-post-stat">💬 312</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-5">
+        <span class="ig-post-emoji">🌴</span>
+        <div class="ig-post-label">Tropical Escape</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 2,954</div>
+          <div class="ig-post-stat">💬 97</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-6">
+        <span class="ig-post-emoji">❄️</span>
+        <div class="ig-post-label">Snow Cabin</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 4,488</div>
+          <div class="ig-post-stat">💬 201</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-7">
+        <span class="ig-post-emoji">🏡</span>
+        <div class="ig-post-label">Cozy Farmhouse</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 3,167</div>
+          <div class="ig-post-stat">💬 145</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-8">
+        <span class="ig-post-emoji">🌊</span>
+        <div class="ig-post-label">Oceanfront Suite</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 5,893</div>
+          <div class="ig-post-stat">💬 267</div>
+        </div>
+      </div>
+
+      <div class="ig-post ig-post-9">
+        <span class="ig-post-emoji">🏕️</span>
+        <div class="ig-post-label">Glamping Night</div>
+        <div class="ig-post-overlay">
+          <div class="ig-post-stat">♥ 7,024</div>
+          <div class="ig-post-stat">💬 389</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="ig-footer">
+    <p>
+      <a href="#">About</a> · <a href="#">Help</a> · <a href="#">Press</a> · <a href="#">API</a> · <a href="#">Jobs</a> · <a href="#">Privacy</a> · <a href="#">Terms</a>
+    </p>
+    <p style="margin-top:10px;">© 2026 Trip Stay from Meta</p>
+  </div>
+
+</div>

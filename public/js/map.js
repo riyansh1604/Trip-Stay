@@ -19,6 +19,10 @@ const marker = new mapboxgl.Marker( {color : 'red',element: markerElement,anchor
             .setHTML(`<h4> ${listing.location} </h4> <p>Exact location will be provided after booking</p>`)
         )
         .addTo(map);
+
+window.addEventListener('resize', () => {
+    map.resize();
+});
     
 map.on('load', () => {
     map.setCenter(coordinates);

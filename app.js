@@ -20,6 +20,7 @@ const User = require("./models/user.js");
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const socialRouter = require("./routes/social.js");
 
 /* const mongoUrl = "mongodb://127.0.0.1:27017/tripstay"; */
 const dbUrl = process.env.ATLASDB_URL;
@@ -92,12 +93,19 @@ app.use((req,res,next) => {
 app.use("/listing",listingsRouter);
 app.use("/listing/:id/reviews",reviewsRouter);
 app.use("/",userRouter);
+app.use("/social",socialRouter);
 
+// Legal & Policy pages
+app.get("/privacy", (req, res) => {
+  res.render("legal/privacy.ejs");
+});
 
+app.get("/terms", (req, res) => {
+  res.render("legal/terms.ejs");
+});
 
-
-app.all("/{*splat}",(req,res,next) =>{
-  next(new ExpressError(404,"Page not Found!!"));
+app.all("/{*splat}", (req, res, next) => {
+  next(new ExpressError(404, "Page not Found!!"));
 });
 
 app.use((err,req,res,next) =>{

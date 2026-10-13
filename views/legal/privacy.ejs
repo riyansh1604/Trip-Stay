@@ -1,0 +1,915 @@
+<% layout("/layouts/minimal.ejs") %>
+
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --primary: #fe424d;
+    --primary-dark: #e0323c;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --bg-light: #f9fafb;
+    --border-color: #e5e7eb;
+    --card-bg: #ffffff;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.65;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── Header / Navbar ── */
+  .legal-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    backdrop-filter: blur(10px);
+  }
+  .legal-nav-inner {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+  }
+  .brand-logo i { font-size: 1.4rem; }
+  .brand-logo span { color: #111827; }
+
+  .nav-right-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .nav-link-btn {
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-link-btn:hover {
+    color: var(--primary);
+    background: #fff1f2;
+  }
+  .nav-action-pill {
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--primary);
+    padding: 7px 16px;
+    border-radius: 9999px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-action-pill:hover { background: var(--primary-dark); }
+
+  /* ── Hero Banner ── */
+  .legal-hero {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 60%, #374151 100%);
+    color: #ffffff;
+    padding: 48px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+  .legal-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(254, 66, 77, 0.25) 0%, transparent 60%);
+  }
+  .hero-content {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    word-break: break-word;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    word-break: break-word;
+  }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: #d1d5db;
+    max-width: 650px;
+    margin: 0 auto 18px;
+    word-break: break-word;
+  }
+  .hero-updated {
+    font-size: 0.85rem;
+    color: #9ca3af;
+  }
+
+  /* ── Key Highlights Row ── */
+  .highlights-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: -24px auto 36px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+  }
+  .highlight-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+    word-break: break-word;
+  }
+  .highlight-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #fef2f2;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+  .highlight-info {
+    min-width: 0;
+    flex: 1;
+  }
+  .highlight-info h4 {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+  .highlight-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* ── Main Layout (Desktop: 2-column) ── */
+  .legal-body-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+    min-width: 0;
+  }
+
+  /* ── Table of Contents Sidebar ── */
+  .legal-sidebar {
+    position: sticky;
+    top: 86px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    min-width: 0;
+    max-width: 100%;
+  }
+  .sidebar-heading {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 0.8px;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+  .toc-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-main);
+    transition: all 0.2s;
+    min-width: 0;
+  }
+  .toc-link:hover {
+    background: #fef2f2;
+    color: var(--primary);
+  }
+  .toc-link i { font-size: 0.9rem; width: 18px; text-align: center; color: var(--text-muted); flex-shrink: 0; }
+  .toc-link:hover i { color: var(--primary); }
+
+  /* ── Content Area ── */
+  .legal-content {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .content-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 110px;
+    min-width: 0;
+    width: 100%;
+  }
+  .content-section:last-child { margin-bottom: 0; }
+
+  .section-badge {
+    display: inline-block;
+    background: #fef2f2;
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    word-break: break-word;
+  }
+  .section-title i { color: var(--primary); font-size: 1.3rem; flex-shrink: 0; }
+
+  .content-section p {
+    font-size: 0.98rem;
+    color: #374151;
+    margin-bottom: 16px;
+    line-height: 1.7;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .info-box {
+    background: #f8fafc;
+    border-left: 4px solid var(--primary);
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    margin: 16px 0;
+    width: 100%;
+    min-width: 0;
+  }
+  .info-box p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: #475569;
+  }
+
+  .policy-list {
+    list-style: none;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .policy-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: #374151;
+    word-break: break-word;
+    min-width: 0;
+  }
+  .policy-list li i {
+    color: #10b981;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Contact Card ── */
+  .contact-card {
+    background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+    border: 1px solid #fecdd3;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 0;
+  }
+  .contact-card-info {
+    min-width: 0;
+    flex: 1;
+  }
+  .contact-card-info h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #9f1239;
+    margin-bottom: 4px;
+  }
+  .contact-card-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #be123c;
+  }
+  .email-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .email-link:hover { background: var(--primary-dark); color: #fff; }
+
+  /* ── Floating Back to Top Button ── */
+  .back-to-top-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(254, 66, 77, 0.35);
+    z-index: 99;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .back-to-top-btn:hover {
+    background: var(--primary-dark);
+    color: #fff;
+    transform: translateY(-3px);
+  }
+
+  /* ── Footer ── */
+  .legal-footer {
+    border-top: 1px solid var(--border-color);
+    background: #ffffff;
+    padding: 24px 20px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    width: 100%;
+  }
+  .legal-footer a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 8px;
+  }
+  .legal-footer a:hover { color: var(--primary); }
+
+  /* ===================================================
+     RESPONSIVE BREAKPOINTS (DESKTOP, TABLET, PHONE)
+     =================================================== */
+
+  /* ── Tablet Large (768px – 991px) ── */
+  @media (min-width: 768px) and (max-width: 991px) {
+    .legal-hero {
+      padding: 38px 20px;
+    }
+    .hero-title {
+      font-size: 2.1rem;
+    }
+    .highlights-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .highlight-card {
+      padding: 14px;
+      gap: 10px;
+    }
+    .highlight-icon {
+      width: 38px;
+      height: 38px;
+      font-size: 1.1rem;
+    }
+    .legal-body-container {
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 20px;
+      padding: 0 16px 50px;
+    }
+    .legal-sidebar {
+      padding: 14px;
+      top: 76px;
+    }
+    .toc-link {
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      gap: 8px;
+    }
+    .legal-content {
+      padding: 28px 22px;
+    }
+    .section-title {
+      font-size: 1.4rem;
+    }
+  }
+
+  /* ── Tablet Small (601px – 767px) ── */
+  @media (min-width: 601px) and (max-width: 767px) {
+    .legal-hero {
+      padding: 32px 16px;
+    }
+    .hero-title {
+      font-size: 1.85rem;
+    }
+    .highlights-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .highlight-card:last-child {
+      grid-column: span 2;
+    }
+    .legal-body-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 16px 40px;
+    }
+    .legal-sidebar {
+      position: static;
+      width: 100%;
+      padding: 16px;
+    }
+    .toc-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .legal-content {
+      padding: 24px 20px;
+    }
+  }
+
+  /* ── Phone (<= 600px): COMPLETE MOBILE OVERRIDE ── */
+  @media (max-width: 600px) {
+    /* Navbar */
+    .legal-nav-inner {
+      padding: 10px 14px;
+      gap: 8px;
+    }
+    .brand-logo {
+      font-size: 1.15rem;
+    }
+    .nav-link-btn {
+      display: none;
+    }
+    .nav-action-pill {
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+
+    /* Hero */
+    .legal-hero {
+      padding: 28px 14px;
+    }
+    .hero-tag {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 1.55rem;
+    }
+    .hero-desc {
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+    .hero-updated {
+      font-size: 0.78rem;
+    }
+
+    /* Highlights: strictly vertical 100% width flex */
+    .highlights-container {
+      margin: -14px auto 20px;
+      padding: 0 12px;
+      width: 100%;
+    }
+    .highlights-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .highlight-card {
+      width: 100%;
+      padding: 14px;
+      gap: 12px;
+    }
+
+    /* Main Container: FLEX COLUMN, NO GRID */
+    .legal-body-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 0 12px 36px;
+      gap: 14px;
+    }
+
+    /* Sticky Horizontal Pill Bar: strictly constrained to screen */
+    .legal-sidebar {
+      position: sticky;
+      top: 55px;
+      z-index: 90;
+      background: #ffffff;
+      padding: 8px 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    .sidebar-heading {
+      display: none;
+    }
+    .toc-list {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      width: 100%;
+      max-width: 100%;
+      gap: 6px;
+      padding: 2px 0 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .toc-list::-webkit-scrollbar { display: none; }
+    .toc-link {
+      flex-shrink: 0;
+      white-space: nowrap;
+      background: #f3f4f6;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: 9999px;
+      gap: 6px;
+    }
+
+    /* Content Card: strictly 100% width */
+    .legal-content {
+      width: 100%;
+      max-width: 100%;
+      padding: 20px 14px;
+      border-radius: 12px;
+    }
+    .content-section {
+      scroll-margin-top: 125px;
+      margin-bottom: 28px;
+      width: 100%;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      gap: 8px;
+    }
+    .section-title i {
+      font-size: 1.1rem;
+    }
+    .content-section p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    .policy-list li {
+      font-size: 0.88rem;
+      gap: 8px;
+    }
+    .info-box {
+      padding: 12px 14px;
+    }
+    .info-box p {
+      font-size: 0.85rem;
+    }
+
+    /* Contact Card */
+    .contact-card {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 16px;
+      gap: 14px;
+      width: 100%;
+    }
+    .email-link {
+      width: 100%;
+      justify-content: center;
+      font-size: 0.88rem;
+      padding: 10px 16px;
+      white-space: normal;
+      text-align: center;
+    }
+
+    /* Back to top button */
+    .back-to-top-btn {
+      bottom: 16px;
+      right: 16px;
+      width: 38px;
+      height: 40px;
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    .legal-footer {
+      padding: 20px 14px;
+      font-size: 0.82rem;
+    }
+  }
+
+  /* Very small screens (<= 360px) */
+  @media (max-width: 360px) {
+    .hero-title {
+      font-size: 1.35rem;
+    }
+    .brand-logo span {
+      font-size: 1.1rem;
+    }
+    .legal-content {
+      padding: 16px 10px;
+    }
+  }
+</style>
+
+<!-- ── Navigation Bar ── -->
+<header class="legal-navbar">
+  <div class="legal-nav-inner">
+    <a href="/listing" class="brand-logo">
+      <i class="fa-solid fa-house-chimney-window"></i>
+      <span>Trip Stay</span>
+    </a>
+    <div class="nav-right-actions">
+      <a href="/terms" class="nav-link-btn"><i class="fa-solid fa-file-contract"></i> Terms of Service</a>
+      <a href="/listing" class="nav-action-pill"><i class="fa-solid fa-compass"></i> Explore Stays</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Hero Banner ── -->
+<section class="legal-hero" id="top">
+  <div class="hero-content">
+    <div class="hero-tag">
+      <i class="fa-solid fa-shield-halved"></i> Trust &amp; Privacy
+    </div>
+    <h1 class="hero-title">Privacy Policy</h1>
+    <p class="hero-desc">We respect your privacy. Here is how Trip Stay collects, protects, and uses your personal information when you book or host with us.</p>
+    <div class="hero-updated">
+      <i class="fa-regular fa-clock"></i> Last Updated: October 14, 2026 · Effective Date: January 1, 2023
+    </div>
+  </div>
+</section>
+
+<!-- ── Key Highlights Row ── -->
+<div class="highlights-container">
+  <div class="highlights-grid">
+    <div class="highlight-card">
+      <div class="highlight-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div class="highlight-info">
+        <h4>Bank-Grade Security</h4>
+        <p>All sensitive payment data and passwords are encrypted using industry-standard protocols.</p>
+      </div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-icon">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <div class="highlight-info">
+        <h4>No Selling of Data</h4>
+        <p>We will never sell or rent your personal browsing and booking history to third-party advertisers.</p>
+      </div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-icon">
+        <i class="fa-solid fa-sliders"></i>
+      </div>
+      <div class="highlight-info">
+        <h4>You Stay in Control</h4>
+        <p>Access, update, or request full deletion of your Trip Stay account and details at any time.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main Layout ── -->
+<div class="legal-body-container">
+
+  <!-- ── Table of Contents Sidebar ── -->
+  <aside class="legal-sidebar">
+    <div class="sidebar-heading">Table of Contents</div>
+    <ul class="toc-list">
+      <li><a href="#collect" class="toc-link"><i class="fa-solid fa-database"></i> 1. Info We Collect</a></li>
+      <li><a href="#use" class="toc-link"><i class="fa-solid fa-gear"></i> 2. How We Use Info</a></li>
+      <li><a href="#sharing" class="toc-link"><i class="fa-solid fa-share-nodes"></i> 3. Sharing &amp; Hosts</a></li>
+      <li><a href="#security" class="toc-link"><i class="fa-solid fa-shield-cat"></i> 4. Data Security</a></li>
+      <li><a href="#cookies" class="toc-link"><i class="fa-solid fa-cookie-bite"></i> 5. Cookies Policy</a></li>
+      <li><a href="#rights" class="toc-link"><i class="fa-solid fa-user-check"></i> 6. Your Rights</a></li>
+      <li><a href="#contact" class="toc-link"><i class="fa-solid fa-envelope"></i> 7. Contact Us</a></li>
+    </ul>
+  </aside>
+
+  <!-- ── Detailed Policy Sections ── -->
+  <main class="legal-content">
+
+    <!-- Section 1 -->
+    <section id="collect" class="content-section">
+      <span class="section-badge">Section 1</span>
+      <h2 class="section-title"><i class="fa-solid fa-database"></i> 1. Information We Collect</h2>
+      <p>When you create an account, search for stays, or make a reservation on Trip Stay, we collect the necessary information to provide you with seamless hospitality services:</p>
+      <ul class="policy-list">
+        <li><i class="fa-solid fa-circle-check"></i> <strong>Account Details:</strong> Name, email address, phone number, and password hash when you sign up.</li>
+        <li><i class="fa-solid fa-circle-check"></i> <strong>Booking Information:</strong> Check-in and check-out dates, guest counts, chosen listing IDs, and transaction receipts.</li>
+        <li><i class="fa-solid fa-circle-check"></i> <strong>Listing Content:</strong> If you are a host, title, descriptions, nightly pricing, images, and exact map locations.</li>
+        <li><i class="fa-solid fa-circle-check"></i> <strong>Reviews &amp; Ratings:</strong> Comments and star ratings you leave for listings you have stayed at.</li>
+      </ul>
+      <div class="info-box">
+        <p><strong>Note:</strong> We do NOT store your full credit card numbers or banking PINs on our servers. All transactions are securely processed via trusted gateway partners.</p>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="use" class="content-section">
+      <span class="section-badge">Section 2</span>
+      <h2 class="section-title"><i class="fa-solid fa-gear"></i> 2. How We Use Your Information</h2>
+      <p>Trip Stay processes your information for clear, legitimate purposes related to your travel experiences:</p>
+      <ul class="policy-list">
+        <li><i class="fa-solid fa-circle-check"></i> To confirm reservations, process bookings, and generate booking invoices.</li>
+        <li><i class="fa-solid fa-circle-check"></i> To verify host identity and ensure listings meet our safety and quality standards.</li>
+        <li><i class="fa-solid fa-circle-check"></i> To send transaction alerts, flash messages, and reservation confirmation emails.</li>
+        <li><i class="fa-solid fa-circle-check"></i> To analyze search patterns, calculate tax toggles, and optimize search filters across destinations.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="sharing" class="content-section">
+      <span class="section-badge">Section 3</span>
+      <h2 class="section-title"><i class="fa-solid fa-share-nodes"></i> 3. Sharing with Hosts &amp; Third Parties</h2>
+      <p>We share limited information strictly when required to facilitate your trip:</p>
+      <ul class="policy-list">
+        <li><i class="fa-solid fa-circle-check"></i> <strong>With Hosts:</strong> When a reservation is placed, your first name, profile avatar, and dates are shared with the host for check-in coordination.</li>
+        <li><i class="fa-solid fa-circle-check"></i> <strong>With Service Providers:</strong> Mapping services (Mapbox API) to display listing coordinates, and cloud storage (Cloudinary) for securely serving photos.</li>
+        <li><i class="fa-solid fa-circle-check"></i> <strong>Legal Compliance:</strong> Only when required by Indian law or competent court directives to prevent fraud or protect public safety.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="security" class="content-section">
+      <span class="section-badge">Section 4</span>
+      <h2 class="section-title"><i class="fa-solid fa-shield-cat"></i> 4. Data Security &amp; Storage</h2>
+      <p>We employ administrative, physical, and technical security safeguards to defend your personal data from unauthorized access, loss, or alteration:</p>
+      <ul class="policy-list">
+        <li><i class="fa-solid fa-circle-check"></i> Passwords are protected using salted cryptographic hashes (PBKDF2 via Passport-Local-Mongoose).</li>
+        <li><i class="fa-solid fa-circle-check"></i> Sessions are persisted securely through MongoStore with encrypted session secrets.</li>
+        <li><i class="fa-solid fa-circle-check"></i> Full HTTPS/TLS encryption across all client-server communications.</li>
+      </ul>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="cookies" class="content-section">
+      <span class="section-badge">Section 5</span>
+      <h2 class="section-title"><i class="fa-solid fa-cookie-bite"></i> 5. Cookies &amp; Local Storage</h2>
+      <p>Trip Stay uses essential cookies to keep you securely signed in and to store user preferences such as your tax display toggle preferences. You can configure your browser to reject cookies, though certain features like session persistence and instant booking will require them.</p>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="rights" class="content-section">
+      <span class="section-badge">Section 6</span>
+      <h2 class="section-title"><i class="fa-solid fa-user-check"></i> 6. Your Rights &amp; Choices</h2>
+      <p>You have full ownership of your data on Trip Stay. Under applicable privacy regulations, you have the right to:</p>
+      <ul class="policy-list">
+        <li><i class="fa-solid fa-circle-check"></i> Review, edit, or delete any listing or review you have authored.</li>
+        <li><i class="fa-solid fa-circle-check"></i> Update your profile credentials through your account dashboard.</li>
+        <li><i class="fa-solid fa-circle-check"></i> Request a copy of your stored reservation data or permanently close your account.</li>
+      </ul>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="contact" class="content-section">
+      <span class="section-badge">Section 7</span>
+      <h2 class="section-title"><i class="fa-solid fa-envelope"></i> 7. Contact Us</h2>
+      <p>Have any questions regarding this Privacy Policy or how your personal information is managed? Our dedicated privacy team is available around the clock.</p>
+
+      <div class="contact-card">
+        <div class="contact-card-info">
+          <h4>Trip Stay Privacy &amp; Data Protection Officer</h4>
+          <p>Trip Stay Private Limited · Connaught Place, New Delhi, India</p>
+        </div>
+        <a href="mailto:privacy@tripstay.com" class="email-link">
+          <i class="fa-solid fa-paper-plane"></i> privacy@tripstay.com
+        </a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── Floating Back to Top Button ── -->
+<a href="#top" class="back-to-top-btn" title="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</a>
+
+<!-- ── Footer ── -->
+<footer class="legal-footer">
+  <p>&copy; 2026 Trip Stay Private Limited. All rights reserved.</p>
+  <p style="margin-top: 6px;">
+    <a href="/privacy">Privacy Policy</a> ·
+    <a href="/terms">Terms of Service</a> ·
+    <a href="/social/instagram">Instagram</a> ·
+    <a href="/social/facebook">Facebook</a> ·
+    <a href="/social/twitter">Twitter</a>
+  </p>
+</footer>
