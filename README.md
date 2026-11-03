@@ -3,6 +3,7 @@
 > A full-stack accommodation listing platform where users can discover stays, create listings, upload property images, view locations on an interactive map, and share reviews.
 
 Trip Stay is an Airbnb-inspired major project built with Node.js, Express, MongoDB, and EJS. It combines server-rendered pages with secure authentication, image hosting, geocoding, map visualisation, category filtering, and review management.
+Live Link:-https://trip-stay-upg2.onrender.com/listing
 
 ---
 
